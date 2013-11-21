@@ -5,3 +5,9 @@
 	path = tmux-powerline
     url = git@github.com:werther0331/tmux-powerline.git
     branch = private
+[submodule "ncurses"]
+	path = ncurses
+	url = git://git.debian.org/collab-maint/ncurses.git
+[submodule "libevent"]
+	path = libevent
+	url = git://git.debian.org/git/collab-maint/libevent.git
