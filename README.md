@@ -1,5 +1,4 @@
 tmux_config
 ===========
 
-copy tmux-powerline-config/.tmux-powerlinerc.default to ~/
-copy tmux-powerline-config/my\_powerline\_themes.sh to tmux-powerline/themes/default.sh  
+tmux auto rename window : f(){ if [ "$PWD" != "$LPWD" ];then LPWD="$PWD"; tmux rename-window ${PWD//*\//}; fi }; export PROMPT_COMMAND=f;
