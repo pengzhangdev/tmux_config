@@ -25,7 +25,8 @@ tmux: update libevent ncurses
 	cd tmux-code \
 	&& ./autogen.sh \
 	&& ./configure \
-	&& cp ../patch/tmux_code_Makefile ./Makefile 
+	&& cp ../patch/patch_for_tmux/tmux_code_Makefile ./Makefile \
+	&& git am ../patch/patch_for_tmux/*.patch
 	make -C tmux-code
 	cp tmux-code/tmux ./
 
