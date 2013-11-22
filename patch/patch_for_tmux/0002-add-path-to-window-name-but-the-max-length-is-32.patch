@@ -1,14 +1,14 @@
-From 4e4dc8c62886ca5647ec576e878a6d3f2b06132f Mon Sep 17 00:00:00 2001
+From db9fb91fc556edf8acdd2822a4b1742b8ed1a698 Mon Sep 17 00:00:00 2001
 From: wertherzhang <wertherzhang@china-liantong.com>
-Date: Fri, 22 Nov 2013 15:38:37 +0800
-Subject: [PATCH] add path to window name but the max length is 32
+Date: Fri, 22 Nov 2013 15:59:20 +0800
+Subject: [PATCH 2/2] add path to window name but the max length is 32
 
 ---
  names.c |   16 ++++++++++++++--
  1 file changed, 14 insertions(+), 2 deletions(-)
 
 diff --git a/names.c b/names.c
-index f536d2f..2cc4d45 100644
+index f536d2f..01205c3 100644
 --- a/names.c
 +++ b/names.c
 @@ -48,6 +48,8 @@ window_name_callback(unused int fd, unused short events, void *data)
@@ -32,7 +32,7 @@ index f536d2f..2cc4d45 100644
 +    }
 +
 +    if (wpath != NULL) {
-+        snprintf(window_name, sizeof(window_name), "%s-%s", wname, wpath);
++        snprintf(window_name, sizeof(window_name), "%s@%s", wname, wpath);
 +    }
 +
 +	if (strcmp(window_name, w->name)) {
