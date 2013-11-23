@@ -1,4 +1,7 @@
 tmux_config
 ===========
 
-tmux auto rename window : f(){ if [ "$PWD" != "$LPWD" ];then LPWD="$PWD"; tmux rename-window ${PWD//*\//}; fi }; export PROMPT_COMMAND=f;
+ALL AVAILABLE FILES ARE IN out/ AFTER BUILD SUCCESS. PLS cp tmux to anywhere and rename terminfo to $HOME/.terminfo.
+And cp tmux.conf to $HOME/.tmux.conf, then rename "/path/to/" ${PWD} which README.md is in.
+
+Enjoy It!!
