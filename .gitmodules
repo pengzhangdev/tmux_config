@@ -3,7 +3,7 @@
 	url = git://git.code.sf.net/p/tmux/tmux-code
 [submodule "tmux-powerline"]
 	path = tmux-powerline
-    url = git@github.com:werther0331/tmux-powerline.git
+    url = https://github.com/werther0331/tmux-powerline.git
     branch = private
 [submodule "ncurses"]
 	path = ncurses

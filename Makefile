@@ -28,8 +28,8 @@ tmux: libevent ncurses
 	mkdir -p libs include out
 	cd tmux-code \
 	&& ./autogen.sh \
-	&& export CFLAGS="-I../includes/ -static" \
-	&& export CPPFLAGS="-I../includes/ -static" \
+	&& export CFLAGS="-I../include/ -static" \
+	&& export CPPFLAGS="-I../include/ -static" \
 	&& export LDFLAGS="-L../libs/" \
 	&& ./configure --enable-static \
 	&& git am ../patch/patch_for_tmux/*.patch
@@ -38,8 +38,8 @@ tmux: libevent ncurses
 	@echo "INSTALL tmux and terminfo to out/"
 
 clean: 
-	-rm -r libs include out
-	-rm tmux
+	-rm -rf libs include out
+	-rm -f tmux
 	make -C libevent/ clean
 	make -C ncurses/ clean
 	make -C tmux-code/ clean
