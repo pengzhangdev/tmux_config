@@ -1,0 +1,81 @@
+From da216afe101a4729dc526770da9c556176d5667c Mon Sep 17 00:00:00 2001
+From: pengzhang <pengzhangdev@gmail.com>
+Date: Fri, 11 Jul 2014 13:59:47 +0800
+Subject: [PATCH 2/2] * [tmux] add cwd in window name
+
+---
+ names.c |   44 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 2 deletions(-)
+
+diff --git a/names.c b/names.c
+index f536d2f..bb6dcf6 100644
+--- a/names.c
++++ b/names.c
+@@ -43,6 +43,44 @@ queue_window_name(struct window *w)
+ 	evtimer_add(&w->name_timer, &tv);
+ }
+ 
++char *
++get_window_mame(struct window *w)
++{
++	char		*name, *wname;
++	char		*cwd;
++	char		cwd_path[16] = {0};
++	char		window_name[32];
++	
++	if (w->active->screen != &w->active->base)
++		name = NULL;
++	else 
++		name = osdep_get_name(w->active->fd, w->active->tty);
++	
++	if (name == NULL) {
++		wname = default_window_name(w);
++	}
++	else {
++		/*
++		 * If tmux is using the default command, it will be a login
++		 * shell and argv[0] may have a - prefix. Remove this if it is
++		 * present. Ick.
++		 */
++		if (w->active->cmd != NULL && *w->active->cmd == '\0' &&
++			name != NULL && name[0] == '-' && name[1] != '\0')
++			wname = parse_window_name(name + 1);
++		else
++			wname = parse_window_name(name);
++		free(name);
++	}
++	
++	cwd = osdep_get_cwd(w->active->fd);
++	snprintf(cwd_path, 16, "%s", parse_window_name(cwd));
++	snprintf(window_name, 32, "%s@%s", wname, cwd_path);
++
++	free(wname);
++	return strdup(window_name);
++}
++
+ void
+ window_name_callback(unused int fd, unused short events, void *data)
+ {
+@@ -58,7 +96,7 @@ window_name_callback(unused int fd, unused short events, void *data)
+ 		return;
+ 	}
+ 	queue_window_name(w);
+-
++#if 0
+ 	if (w->active->screen != &w->active->base)
+ 		name = NULL;
+ 	else
+@@ -84,7 +122,9 @@ window_name_callback(unused int fd, unused short events, void *data)
+ 		free(wname);
+ 		wname = name;
+ 	}
+-
++#endif
++	wname = get_window_mame(w);
++	
+ 	if (strcmp(wname, w->name)) {
+ 		window_set_name(w, wname);
+ 		server_status_window(w);
+-- 
+1.7.9.5
+

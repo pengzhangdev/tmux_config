@@ -24,7 +24,7 @@ ncurses: update
 	cd libs/ \
 	&& ln -sf libncurses.a libcurses.a
 
-tmux: update libevent ncurses
+tmux: libevent ncurses
 	mkdir -p libs include out
 	cd tmux-code \
 	&& ./autogen.sh \
