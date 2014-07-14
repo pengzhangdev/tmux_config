@@ -1,4 +1,4 @@
-From 6665e6052e73b84408fd502a898228750cb4437b Mon Sep 17 00:00:00 2001
+From 1c104d814f07e18f6c6cb8f04ddf0487d1d580d2 Mon Sep 17 00:00:00 2001
 From: wertherzhang <wertherzhang@china-liantong.com>
 Date: Fri, 22 Nov 2013 13:00:12 +0800
 Subject: [PATCH 1/2] add patch libutil.h

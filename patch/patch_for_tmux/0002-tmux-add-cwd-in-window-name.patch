@@ -1,17 +1,17 @@
-From da216afe101a4729dc526770da9c556176d5667c Mon Sep 17 00:00:00 2001
+From 5f7f30d0dbd3a92bb89a29efdf2d20adb3cb5c73 Mon Sep 17 00:00:00 2001
 From: pengzhang <pengzhangdev@gmail.com>
 Date: Fri, 11 Jul 2014 13:59:47 +0800
 Subject: [PATCH 2/2] * [tmux] add cwd in window name
 
 ---
- names.c |   44 ++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 42 insertions(+), 2 deletions(-)
+ names.c |   49 +++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 47 insertions(+), 2 deletions(-)
 
 diff --git a/names.c b/names.c
-index f536d2f..bb6dcf6 100644
+index f536d2f..5c4b5d5 100644
 --- a/names.c
 +++ b/names.c
-@@ -43,6 +43,44 @@ queue_window_name(struct window *w)
+@@ -43,6 +43,49 @@ queue_window_name(struct window *w)
  	evtimer_add(&w->name_timer, &tv);
  }
  
@@ -20,14 +20,14 @@ index f536d2f..bb6dcf6 100644
 +{
 +	char		*name, *wname;
 +	char		*cwd;
-+	char		cwd_path[16] = {0};
-+	char		window_name[32];
-+	
++	char		cwd_path[16] = {'\0'};
++	char		window_name[32] = {'\0'};
++
 +	if (w->active->screen != &w->active->base)
 +		name = NULL;
-+	else 
++	else
 +		name = osdep_get_name(w->active->fd, w->active->tty);
-+	
++
 +	if (name == NULL) {
 +		wname = default_window_name(w);
 +	}
@@ -44,19 +44,24 @@ index f536d2f..bb6dcf6 100644
 +			wname = parse_window_name(name);
 +		free(name);
 +	}
-+	
++
 +	cwd = osdep_get_cwd(w->active->fd);
++	if (cwd == NULL) {
++		snprintf(window_name, 32, "%s", wname);
++		free(wname);
++		return xstrdup(window_name);
++	}
 +	snprintf(cwd_path, 16, "%s", parse_window_name(cwd));
 +	snprintf(window_name, 32, "%s@%s", wname, cwd_path);
 +
 +	free(wname);
-+	return strdup(window_name);
++	return xstrdup(window_name);
 +}
 +
  void
  window_name_callback(unused int fd, unused short events, void *data)
  {
-@@ -58,7 +96,7 @@ window_name_callback(unused int fd, unused short events, void *data)
+@@ -58,7 +101,7 @@ window_name_callback(unused int fd, unused short events, void *data)
  		return;
  	}
  	queue_window_name(w);
@@ -65,7 +70,7 @@ index f536d2f..bb6dcf6 100644
  	if (w->active->screen != &w->active->base)
  		name = NULL;
  	else
-@@ -84,7 +122,9 @@ window_name_callback(unused int fd, unused short events, void *data)
+@@ -84,7 +127,9 @@ window_name_callback(unused int fd, unused short events, void *data)
  		free(wname);
  		wname = name;
  	}
