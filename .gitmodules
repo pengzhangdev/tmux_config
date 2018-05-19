@@ -1,6 +1,6 @@
 [submodule "tmux-code"]
 	path = tmux-code
-	url = git://git.code.sf.net/p/tmux/tmux-code
+	url = https://github.com/tmux/tmux.git
 [submodule "tmux-powerline"]
 	path = tmux-powerline
     url = https://github.com/werther0331/tmux-powerline.git
