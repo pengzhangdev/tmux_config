@@ -1,0 +1,47 @@
+
+
+update:
+	git submodule update --init
+
+libevent: update
+	mkdir -p libs include out
+	cd libevent \
+	&& ./autogen.sh \
+	&& ./configure --host=arm-linux-gnueabi
+	make -C libevent/
+	cp libevent/.libs/libevent* libs/
+	cp -rf libevent/include/event2 include/
+	cp -f libevent/evdns.h libevent/event.h libevent/evhttp.h libevent/evrpc.h libevent/evutil.h include/
+
+ncurses: update
+	mkdir -p libs include out
+	cd ncurses \
+	&& ./configure --datarootdir=${PWD}/out/ --host=arm-linux-gnueabi
+	make -C ncurses/
+	make -C ncurses/misc install
+	cp ncurses/lib/libncurses* libs/
+	cp -rf ncurses/include/* include/
+	cd libs/ \
+	&& ln -sf libncurses.a libcurses.a
+
+tmux: libevent ncurses
+	mkdir -p libs include out
+	cd tmux-code \
+	&& ./autogen.sh \
+	&& export CFLAGS="-I../include/ -static" \
+	&& export CPPFLAGS="-I../include/ -static" \
+	&& export LDFLAGS="-L../libs/" \
+	&& ./configure --enable-static --host=arm-linux-gnueabi \
+	&& git am ../patch/patch_for_tmux/*.patch
+	make -C tmux-code
+	cp tmux-code/tmux ./out/
+	@echo "INSTALL tmux and terminfo to out/"
+
+clean: 
+	-rm -rf libs include out
+	-rm -f tmux
+	make -C libevent/ clean
+	make -C ncurses/ clean
+	make -C tmux-code/ clean
+	git submodule update --init
+
